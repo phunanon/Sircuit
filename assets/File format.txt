@@ -1,0 +1,13 @@
+
+0-1		uint16_t	NumObjects
+...
+2		uint8_t		TypeID
+3-4		uint16_t	ID
+5-9		float		X
+10-13	float		Y
+(unique data based on TypeID)
+14		uint8_t		NumConnections
+....
+15-16	uint16_t	ForeignID
+....
+...
