@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
+enum ObjTypes { O_NULL, O_AND, O_OR, O_XOR, O_NOT, O_Switch, O_Panel, O_Random, O_Bit, O_Indicator };
+
 struct ObjX;
 
 class Obj : public sf::Shape

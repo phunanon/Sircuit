@@ -7,6 +7,22 @@
 static uint16_t nextObjId = 1;
 uint16_t NextObjId () { return nextObjId++; }
 
+Obj* ObjFromTypeId (ObjTypes typeId)
+{
+	switch (typeId) {
+		case O_AND: return new ObjAND(); break;
+		case O_OR: return new ObjOR(); break;
+		case O_XOR: return new ObjXOR(); break;
+		case O_NOT: return new ObjNOT(); break;
+		case O_Switch: return new ObjSwitch(); break;
+		case O_Panel: return new ObjPanel(); break;
+		case O_Random: return new ObjRandom(); break;
+		case O_Bit: return new ObjBit(); break;
+		case O_Indicator: return new ObjIndicator(); break;
+		default: printf("Err: Unknown typeId: %d\n", typeId); break;
+	}
+}
+
 void AddObj (std::vector<Obj*> &objs, Obj* o, sf::Vector2f pos, bool autoCenter)
 {
 	o->Id = NextObjId();
@@ -58,27 +74,15 @@ void OpenFromFile (std::vector<Obj*> &objs, bool isComponent, sf::Vector2f start
 		fread(&pos.x, sizeof(float), 1, rfp);
 		fread(&pos.y, sizeof(float), 1, rfp);
 
-		Obj* newObj = NULL;
-		switch (typeId) {
-			case 1: newObj = new ObjAND(); break;
-			case 2: newObj = new ObjOR(); break;
-			case 3: newObj = new ObjXOR(); break;
-			case 4: newObj = new ObjNOT(); break;
-			case 5: newObj = new ObjSwitch(); break;
-			case 6: newObj = new ObjPanel(); break;
-			case 7: newObj = new ObjRandom(); break;
-			case 8: newObj = new ObjBit(); break;
-			case 9: newObj = new ObjIndicator(); break;
-			default: printf("Err: Unknown typeId: %d\n", typeId); break;
-		}
-
+		Obj* newObj = ObjFromTypeId((ObjTypes)typeId);
 		AddObj(objs, newObj, pos + startPos, false);
 
+		//Load TypeId-specific data
 		switch (newObj->TypeId) {
-			case 5:
+			case O_Switch:
 				fread(&((ObjSwitch*)newObj)->IsOn, sizeof(bool), 1, rfp);
 				break;
-			case 6:
+			case O_Panel:
 				auto newSize = sf::Vector2f();
 				fread(&newSize.x, sizeof(float), 1, rfp);
 				fread(&newSize.y, sizeof(float), 1, rfp);
@@ -164,11 +168,12 @@ void SaveData (const char* savePath, std::vector<Obj*> &objs, bool isComponent)
 		fwrite(&obj->SaveId, sizeof(uint16_t), 1, wfp);
 		fwrite(&pos.x, sizeof(float), 1, wfp);
 		fwrite(&pos.y, sizeof(float), 1, wfp);
+		//Save TypeId-specific data
 		switch (obj->TypeId) {
-			case 5:
+			case O_Switch:
 				fwrite(&((ObjSwitch*)obj)->IsOn, sizeof(bool), 1, wfp);
 				break;
-			case 6:
+			case O_Panel:
 				fwrite(&obj->Size.x, sizeof(float), 1, wfp);
 				fwrite(&obj->Size.y, sizeof(float), 1, wfp);
 				break;

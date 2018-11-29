@@ -94,7 +94,7 @@ int main ()
 				if (isPanning) trans.translate(-delta/trans.getMatrix()[0]);
 				if (isDragging) {
 					auto drag = -delta / trans.getMatrix()[0];
-					if (mObj->TypeId == 6) MovePanel(drag, mObj, objects);
+					if (mObj->TypeId == O_Panel) MovePanel(drag, mObj, objects);
 					else mObj->move(drag);
 				}
 				//Begin pan/drag/click
@@ -105,7 +105,7 @@ int main ()
 					//Check if mouse over object - obj preferred to be non-panel
 					for (auto &obj : objects) {
 						if (!obj->getRoughRect().contains(mLoc)) continue;
-						if (!mObj || (mObj && obj->TypeId != 6)) mObj = obj;
+						if (!mObj || (mObj && obj->TypeId != O_Panel)) mObj = obj;
 					}
 					
 					if (isLeftClick) {
@@ -116,7 +116,7 @@ int main ()
 						} else if (!mObj && !lShift) isPanning = true;
 						else if (mObj) {
 							isDragging = true;
-							if (mObj->TypeId == 6) StartPanelDrag(mObj, objects, mLoc); //If we are beginning to drag a panel, mark participant objects
+							if (mObj->TypeId == O_Panel) StartPanelDrag(mObj, objects, mLoc); //If we are beginning to drag a panel, mark participant objects
 						}
 					}
 				}
@@ -126,7 +126,7 @@ int main ()
 			} else {
 				bool wasClick = prevClick == mPos;
 				
-				if ((!mObj || (mObj && mObj->TypeId == 6)) && wasClick && !clickSpent) {
+				if ((!mObj || (mObj && mObj->TypeId == O_Panel)) && wasClick && !clickSpent) {
 					//Check if there was a connection under the mouse, and delete it
 					for (auto &obj : objects) {
 						auto conns = &obj->Connections;
@@ -152,7 +152,7 @@ int main ()
 					} else {
 						//Snap to grid
 						mObj->setLocation(SnapPos(mObj->getPosition()));
-						if (mObj->TypeId == 6) SnapPanelObjs(mObj, objects);
+						if (mObj->TypeId == O_Panel) SnapPanelObjs(mObj, objects);
 					}
 					mObj = NULL;
 				}
@@ -245,7 +245,7 @@ void DuplicateObjs (std::vector<Obj*> &objs, sf::Vector2f mLoc)
 {
 	sf::Vector2f panelPos;
 	for (auto &obj : objs)
-		if (obj->SelectParticipant && obj->TypeId == 6) {
+		if (obj->SelectParticipant && obj->TypeId == O_Panel) {
 			panelPos = obj->CenterPos;
 			break;
 		}

@@ -37,61 +37,57 @@ sf::FloatRect Obj::getRoughRect ()
 
 ObjAND::ObjAND ()
 {
-	TypeId = 1;
+	TypeId = O_AND;
 	_vertices = MakeOctogon(sf::Color(250, 128, 50), Size);
 }
 
 ObjOR::ObjOR ()
 {
-	TypeId = 2;
+	TypeId = O_OR;
 	_vertices = MakeSmallDiamond(sf::Color(150, 150, 150), Size);
 }
 
 ObjXOR::ObjXOR ()
 {
-	TypeId = 3;
+	TypeId = O_XOR;
 	_vertices = MakeOctogon(sf::Color(250, 150, 250), Size);
 }
 
 ObjNOT::ObjNOT ()
 {
-	TypeId = 4;
+	TypeId = O_NOT;
 	_vertices = MakeSmallSquare(sf::Color(250, 50, 50), Size);
 }
 
 ObjSwitch::ObjSwitch ()
 {
-	TypeId = 5;
+	TypeId = O_Switch;
 	_vertices = MakeOctogon(sf::Color(100, 50, 250), Size);
 }
 
 ObjPanel::ObjPanel ()
 {
-	TypeId = 6;
+	TypeId = O_Panel;
 	Size *= 2.f;
 	Connectable = false;
 	RemakeRect();
 }
-void ObjPanel::RemakeRect () {
-	delete _vertices;
-	_vertices = MakeResizeRectangle(sf::Color(0, 0, 0, 32), Size);
-}
 
 ObjRandom::ObjRandom ()
 {
-	TypeId = 7;
+	TypeId = O_Random;
 	_vertices = MakeOctogon(sf::Color(150, 75, 0), Size);
 }
 
 ObjBit::ObjBit ()
 {
-	TypeId = 8;
+	TypeId = O_Bit;
 	_vertices = MakeOctogon(sf::Color(50, 50, 250), Size);
 }
 
 ObjIndicator::ObjIndicator ()
 {
-	TypeId = 9;
+	TypeId = O_Indicator;
 	_vertices = MakeOctogon(sf::Color::Black, Size);
 }
 
@@ -191,6 +187,11 @@ bool ObjIndicator::getActive ()
 
 
 
+
+void ObjPanel::RemakeRect () {
+	delete _vertices;
+	_vertices = MakeResizeRectangle(sf::Color(0, 0, 0, 32), Size);
+}
 
 
 static bool IsPointNearLine (sf::Vector2f p1, sf::Vector2f p2, sf::Vector2f p, float dist = 1)
