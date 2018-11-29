@@ -1,6 +1,8 @@
 # Sircuit
 SFML 2D drag'n'drop logic circuit simulator. A descendant of [CCircuit](https://github.com/phunanon/CCircuit).
 
+![3+2=5 demo](media/add_and_display_min.png)
+
 ## Features
 
 * Objects: AND, OR, XOR, NOT, Switch, Randomiser, Bit (flip-flop), Indicator, Panel
